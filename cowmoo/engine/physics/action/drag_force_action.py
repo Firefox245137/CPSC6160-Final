@@ -22,7 +22,7 @@ class DragForceAction:
  
     def act(self, data):                       # Run this action if the conditions are right 
         if self.condition_to_act(data):        # Check whether the conditions are right 
-            for i in range(0, len(data.acceleration)):
+            for i in range(len(data.acceleration)):
                 if data.active_particle[i] and (data.active_drag[i] or self.entity_state.drag_constant < 0) :
                     data.acceleration[i][0] -= self.entity_state.drag_constant * data.velocity[i][0]
                     data.acceleration[i][1] -= self.entity_state.drag_constant * data.velocity[i][1]

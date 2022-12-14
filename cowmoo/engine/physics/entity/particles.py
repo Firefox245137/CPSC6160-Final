@@ -30,5 +30,5 @@ class Particles:
         self.active_particle.append(True)
         self.active_gravity.append(True)
         self.active_spring.append(True)
-        self.active_drag.append(False)
+        self.active_drag.append(True)
 
