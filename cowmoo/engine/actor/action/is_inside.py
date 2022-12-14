@@ -1,7 +1,7 @@
 import pygame
 
 class IsInside: 
-    def __init__(self): 
+    def __init__(self, offset=0): 
         self.types = []                 # one or more types to assign to this action 
                                                # the specific types “event”, “loop”, “display” 
                                                # are picked up and used by the game looper. 
@@ -9,6 +9,7 @@ class IsInside:
  
         self.entity_state = None               # This class variable is assigned by the entity’s insert_action call 
         self.to_check = []                     # Theorhetically can check multiple different particles classes
+        self.offset = offset
         self.name = "is_inside"                # Names are frequently useful 
         self.verbose = False                   # verbose flags are handy 
         self.children = []                     # List of child actions that this action may choose to call 
@@ -28,8 +29,9 @@ class IsInside:
             curr = 0
             for i in self.to_check:
                 for p in i.position:
-                    if p[0] > self.entity_state.bounds[0] and p[0] < self.entity_state.bounds[2] + self.entity_state.bounds[0] and p[1] > self.entity_state.bounds[1] and p[1] < self.entity_state.bounds[3] + self.entity_state.bounds[1]: 
+                    if p[0] > self.entity_state.bounds[0]-self.offset and p[0] < self.entity_state.bounds[2] + self.entity_state.bounds[0]+self.offset and p[1] > self.entity_state.bounds[1]-self.offset and p[1] < self.entity_state.bounds[3] + self.entity_state.bounds[1]+self.offset: 
                         new_data.append(curr)
+                        print("inside")
                     curr += 1
             for i in new_data:
                 for c in self.children:            # Have the children act as well 

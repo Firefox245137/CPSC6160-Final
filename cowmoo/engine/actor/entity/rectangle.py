@@ -16,3 +16,6 @@ class Rectangle:
         a.entity_state = self 
         self.actions.append(a) 
         return 
+    
+    def move(self, x, y):
+        self.bounds = (self.bounds[0]+x, self.bounds[1]+y, self.bounds[2], self.bounds[3])

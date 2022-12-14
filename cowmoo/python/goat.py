@@ -7,6 +7,39 @@ import cowmoo.engine.physics as phys
 import cowmoo.engine.actor as act
 import pygame 
 import random
+import copy
+
+class EnemyAI:
+    def __init__(self, direction, boundllc, boundurc):
+        self.types = ["loop"]
+        self.entity_state = None               # This class variable is assigned by the entity’s insert_action call 
+        self.name = "enemy_AI"          # Names are frequently useful 
+        self.verbose = False                   # verbose flags are handy 
+        self.direction = direction
+        self.boundllc = boundllc
+        self.boundurc = boundurc
+        self.children = []                     # List of child actions that this action may choose to call 
+ 
+    def condition_to_act(self, data):          # Check whether conditions are right for running this action 
+        if self.entity_state == None: 
+            return False 
+        if self.entity_state.active == False: 
+            return False  
+        return True 
+ 
+    def act(self, data):                       # Run this action if the conditions are right 
+        if self.condition_to_act(data):        # Check whether the conditions are right 
+            # print(data.key)
+            # while()
+            if self.boundllc[0] > self.entity_state.bounds[0] or self.boundllc[1] > self.entity_state.bounds[1] or self.boundurc[0] < self.entity_state.bounds[0] or self.boundurc[1] < self.entity_state.bounds[1]:
+                self.direction[0] *= -1
+                self.direction[1] *= -1
+            self.entity_state.move(self.direction[0], self.direction[1])
+            for c in self.children:            # Have the children act as well 
+                c.act(data) 
+            if self.verbose:                   # A diagnostic when the verbose is True 
+                print( self.name + " for " + self.entity_state.name + " at " + str(event.pos)) 
+        return
 
 class MovePlayer:
     def __init__(self, direction, key):
@@ -41,18 +74,32 @@ class MovePlayer:
                 print( self.name + " for " + self.entity_state.name + " at " + str(event.pos)) 
         return
 
+#Not an actual action-- just a helper function
+def spawnEnemy(loc, direction, bound1, bound2, ppart, pwidth):
+    enemy = act.make_rectangle((loc[0], loc[1], 30, 30), (255,0,0))
+    drawEnemyAction = act.make_draw_rect_action()
+    enemyAIAction = EnemyAI(direction, bound1, bound2)
+    insideEnemyAction = act.make_is_inside_action(pwidth)
+    insideEnemyAction.types.append("loop")
+    insideEnemyAction.to_check.append(ppart)
+    enemy.insert_action(drawEnemyAction)
+    enemy.insert_action(enemyAIAction)
+    enemy.insert_action(insideEnemyAction)
+    return enemy, drawEnemyAction
+
 #Declare some constants
 WIDTH = 1280
 HEIGHT = 720
 playerWidth = 20
 playerSpeed = 2.5
-
+enemies = []
+byLevel = []
 
 #Non-physics entities
 game_looper = pl.make_game_loop() 
 game_looper.verbose = False 
 viewer = pl.make_frame_viewer(WIDTH,HEIGHT) 
-viewer.set_title("The Worlds")
+viewer.set_title("World's Most Not Easiest Game")
 viewer.insert_action(  pl.make_terminate_action() )
 display = pl.make_update_display_action() 
 button = ui.make_button((0,0,WIDTH,HEIGHT), (0,0,0), "screenButton")
@@ -170,6 +217,26 @@ isOutsideAction1 = phys.make_outside_rectangle_collider_action()
 rect1collider.insert_action(isOutsideAction1)
 psolveAction.children.append(isOutsideAction1)
 
+enemy1, drawE1 = spawnEnemy([250,250], [1,0], [150,250], [350,250], playerParticle, playerWidth)
+display.children.append(drawE1)
+enemies.append(enemy1)
+byLevel.append(len(enemies)-1)
+
+enemy2, drawE2 = spawnEnemy([250,250], [0,1], [250,150], [250,350], playerParticle, playerWidth)
+display.children.append(drawE2)
+enemies.append(enemy2)
+byLevel.append(len(enemies)-1)
+
+enemy3, drawE3 = spawnEnemy([250,250], [0,0], [250,150], [250,350], playerParticle, playerWidth)
+display.children.append(drawE3)
+enemies.append(enemy3)
+byLevel.append(len(enemies)-1)
+
+enemy4, drawE4 = spawnEnemy([250,250], [1,1], [150,150], [350,350], playerParticle, playerWidth)
+display.children.append(drawE4)
+enemies.append(enemy4)
+byLevel.append(len(enemies)-1)
+
 #Make the rectangles for checking which side of the screen the particles are on
 # leftRect = act.make_rectangle((0, 0, 850, HEIGHT), (255,255,255))
 # isInsideActionLeft = act.make_is_inside_action()
@@ -201,6 +268,8 @@ game_looper.insert_entity(button)
 game_looper.insert_entity(player)
 game_looper.insert_entity(playerParticle)
 game_looper.insert_entity(timer)
+for e in enemies:
+    game_looper.insert_entity(e)
 
 #Finally, loop
 game_looper.loop()

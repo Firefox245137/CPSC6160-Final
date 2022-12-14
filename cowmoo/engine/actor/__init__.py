@@ -26,9 +26,9 @@ def make_draw_round_action():
     import cowmoo.engine.actor.action.draw_round as dc 
     return dc.DrawRound()
 
-def make_is_inside_action(): 
+def make_is_inside_action(offset=0): 
     import cowmoo.engine.actor.action.is_inside as ii 
-    return ii.IsInside()
+    return ii.IsInside(offset)
 
 def make_put_position_action(): 
     import cowmoo.engine.actor.action.put_position as pp 
