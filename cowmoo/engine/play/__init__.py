@@ -39,3 +39,7 @@ def make_clear_action():
 def make_load_level_action():#level, mid = False):
     import cowmoo.engine.play.action.load_new_level as ll
     return ll.loadNewLevel()#level, mid = False)
+
+def make_load_lvl_action(lvlname, gloop, disp):
+    import cowmoo.engine.play.action.load_level as lvl
+    return lvl.LoadLevel(lvlname, gloop, disp)
