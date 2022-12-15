@@ -87,15 +87,15 @@ def spawnEnemy(loc, direction, bound1, bound2, ppart, pwidth):
     enemy.insert_action(insideEnemyAction)
     return enemy, drawEnemyAction
 
-def playerSetup(playerWidth=20, playerSpeed=2.5, WIDTH=1280, HEIGHT=720):
+def playerSetup(playerWidth=20, playerSpeed=2.5, positionX = 50, positionY = 50, WIDTH=1280, HEIGHT=720):
     #Physics-related things
     playerParticle = phys.make_particles()
     # player = act.make_rectangle((50, 50, playerWidth, playerWidth), (255,255,255))
-    player = act.make_circle(playerWidth, (50, 50), (255,255,255))
+    player = act.make_circle(playerWidth, (positionX, positionY), (255,255,255))
     drawPlayerAction = act.make_draw_round_action()
     player.insert_action(drawPlayerAction)
     # display.children.append(drawPlayerAction)
-    playerParticle.add_particle([50,50], [.1,.1], 1)
+    playerParticle.add_particle([positionX,positionY], [.1,.1], 1)
     playerParticle.insert_action(MovePlayer([playerSpeed,0.0], pygame.K_RIGHT))
     playerParticle.insert_action(MovePlayer([-playerSpeed,0.0], pygame.K_LEFT))
     playerParticle.insert_action(MovePlayer([0.0,-playerSpeed], pygame.K_UP))
@@ -203,7 +203,7 @@ def createGoal(bounds, nextLevelName, ppart, gloop, dplay, playerWidth=20):
     return goal, goalDrawAction
 
 def createWall(bounds, psolveAction, playerWidth=20):
-    rect1 = act.make_rectangle(bounds, (255,255,255))
+    rect1 = act.make_rectangle(bounds, (200,200,200))
     drawRectAction1 = act.make_draw_rect_action()
     rect1.insert_action(drawRectAction1)
     rect1collider = phys.make_rectangle_collider([bounds[0]-playerWidth, bounds[1]-playerWidth], [bounds[0]+bounds[2]+playerWidth, bounds[1]+bounds[3]+playerWidth])        #I extend the reach of some of the ends of colliders to prevent particles phasing through
