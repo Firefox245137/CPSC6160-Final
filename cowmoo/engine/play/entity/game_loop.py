@@ -34,6 +34,8 @@ class GameLoop:
             self.loop_content.append(a)
             if(self.verbose):
                 print(self.name + " inserted action " + a.name)
+        elif "clear" in a.types:
+            a.entity_state = self
         return
 
     def loop(self):
@@ -46,4 +48,5 @@ class GameLoop:
                 a.act(None)
             for a in self.display_content:
                 a.act(None)
+				
         return

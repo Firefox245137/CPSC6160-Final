@@ -105,6 +105,13 @@ display = pl.make_update_display_action()
 button = ui.make_button((0,0,WIDTH,HEIGHT), (0,0,0), "screenButton")
 timer = util.make_timer()
 
+Loader = pl.make_loader(game_looper, timer)
+LoadAction = pl.make_load_level_action()
+Loader.insert_action(LoadAction)
+
+clear = pl.make_clear_action()
+game_looper.insert_action(clear)
+
 #Physics-related things
 playerParticle = phys.make_particles()
 # player = act.make_rectangle((50, 50, playerWidth, playerWidth), (255,255,255))
@@ -260,7 +267,25 @@ timer.insert_action(startAction)
 timer.insert_action(alarmAction)
 pressAction = ui.make_press_button_action()
 button.insert_action(pressAction)
-viewer.insert_action(display)
+
+# start button
+start_button = ui.make_button( (WIDTH/2-100, HEIGHT/2-50, 200, 100) , (255, 255, 255), "start_button" )
+start_button.message = "start"
+
+drawButtonAction = ui.make_draw_button_action()
+start_button.insert_action(drawButtonAction)	
+#display.children.append(drawButtonAction)
+Loader.display.children.append(drawButtonAction)
+
+pressButtonAction = ui.make_press_button_action()
+start_button.insert_action(pressButtonAction)	
+pressButtonAction.children.append(clear)
+pressButtonAction.children.append(startAction)
+pressButtonAction.children.append(LoadAction)
+
+### Switch here ####
+#viewer.insert_action(display)
+viewer.insert_action(Loader.display)
 
 #Insert entities into the game looper
 game_looper.insert_entity(viewer)
@@ -268,8 +293,14 @@ game_looper.insert_entity(button)
 game_looper.insert_entity(player)
 game_looper.insert_entity(playerParticle)
 game_looper.insert_entity(timer)
+game_looper.insert_entity(start_button)
 for e in enemies:
     game_looper.insert_entity(e)
+
+for en in Loader.entity:
+	game_looper.insert_entity(en)
+
+Loader.gameloop = game_looper
 
 #Finally, loop
 game_looper.loop()

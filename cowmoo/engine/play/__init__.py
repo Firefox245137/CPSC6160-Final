@@ -12,7 +12,10 @@ def make_game_loop():
     result = gl.GameLoop() 
     return result 
  
- 
+def make_loader(game_looper, timer): 
+    import cowmoo.engine.play.entity.loader as loader 
+    result = loader.Loader(game_looper ,timer) 
+    return result  
 ### 
 ### Actions 
 ### 
@@ -28,3 +31,11 @@ def make_update_display_action():
 def make_screen_resize_action():
     import cowmoo.engine.play.action.screen_resize as sr
     return sr.ScreenResize()
+    
+def make_clear_action():
+    import cowmoo.engine.play.action.clear as cl
+    return cl.clear()
+    
+def make_load_level_action():#level, mid = False):
+    import cowmoo.engine.play.action.load_new_level as ll
+    return ll.loadNewLevel()#level, mid = False)

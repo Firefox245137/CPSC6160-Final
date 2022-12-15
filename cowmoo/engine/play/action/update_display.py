@@ -40,3 +40,9 @@ class UpdateDisplay:
                 print( self.name + " for " + self.entity_state.name + " at " + str(event.pos)) 
             
         return
+        
+    def clear(self, data):                       # Run this action if the conditions are right 
+        if self.condition_to_act(data):        # Check whether the conditions are right 
+            del self.children[:]
+            print("clear")
+        return

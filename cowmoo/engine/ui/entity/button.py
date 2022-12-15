@@ -5,6 +5,7 @@ class Button:
         self.bounds = bounds 
         self.color = color            # (r,g,b) 
         self.template = None          # Member variable for the image template in a template button 
+        self.message = "button"
         self.actions = [] 
         self.name = name 
         self.verbose = False 
