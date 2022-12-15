@@ -22,6 +22,10 @@ class LoadLevel:
  
     def act(self, data):                       # Run this action if the conditions are right 
         if self.condition_to_act(data):        # Check whether the conditions are right 
+            for a in self.gameLoop.loop_content:
+                if(a.__class__.__name__ == "UpdateTimer"):
+                    print("Time taken for level:", a.entity_state.elapsed_time()/1000)
+                del a
             self.displayMaster.children.clear()
             term = self.gameLoop.event_content[0]
             self.gameLoop.event_content.clear()
