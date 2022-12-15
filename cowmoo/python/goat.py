@@ -188,7 +188,7 @@ def playerSetup(playerWidth=20, playerSpeed=2.5, WIDTH=1280, HEIGHT=720):
     insideAction = phys.make_inside_rectangle_collider_action()
     windowContainerCollider.insert_action(insideAction)
     psolveAction.children.append(insideAction)
-    return player, playerParticle, drawPlayerAction
+    return player, playerParticle, drawPlayerAction, psolveAction
 
 def createGoal(bounds, nextLevelName, ppart, gloop, dplay, playerWidth=20):
     goal = act.make_rectangle(bounds, (0,255,0))
@@ -202,18 +202,19 @@ def createGoal(bounds, nextLevelName, ppart, gloop, dplay, playerWidth=20):
     goal.insert_action(insideGoalAction)
     return goal, goalDrawAction
 
-def createWall(bounds):
-    rect1 = act.make_rectangle((800, 0, 100, 200), (255,255,255))
+def createWall(bounds, psolveAction, playerWidth=20):
+    rect1 = act.make_rectangle(bounds, (255,255,255))
     drawRectAction1 = act.make_draw_rect_action()
     rect1.insert_action(drawRectAction1)
-    display.children.append(drawRectAction1)
-    rect1collider = phys.make_rectangle_collider([800-playerWidth, -10-playerWidth], [900+playerWidth, 200+playerWidth])        #I extend the reach of some of the ends of colliders to prevent particles phasing through
+    rect1collider = phys.make_rectangle_collider([bounds[0]-playerWidth, bounds[1]-playerWidth], [bounds[0]+bounds[2]+playerWidth, bounds[1]+bounds[3]+playerWidth])        #I extend the reach of some of the ends of colliders to prevent particles phasing through
     isOutsideAction1 = phys.make_outside_rectangle_collider_action()
     rect1collider.insert_action(isOutsideAction1)
     psolveAction.children.append(isOutsideAction1)
+    return rect1, drawRectAction1
     
 WIDTH = 1280
 HEIGHT = 720
+playerWidth = 20
 
 if __name__ == "__main__":
     #Declare some constants
@@ -231,8 +232,6 @@ if __name__ == "__main__":
     display = pl.make_update_display_action() 
     viewer.insert_action(display)
     timer = util.make_timer()
-    globalLoop.append(game_looper)
-    globalDisplay.append(display)
 
     # Loader = pl.make_loader(game_looper, timer)
     # LoadAction = pl.make_load_level_action()
