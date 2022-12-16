@@ -270,8 +270,12 @@ if __name__ == "__main__":
     viewer.insert_action(display)
     timer = util.make_timer()
 
+    hud = ui.make_hud( WIDTH/2,HEIGHT/2-100 ,"World's Most Not Easiest Game", (255, 255, 255), (0, 0, 0), size = 60)
+    drawHudAction = ui.make_hud_action()
+    hud.insert_action(drawHudAction)	
+    display.children.append(drawHudAction)
     # start button
-    start_button = ui.make_button( (WIDTH/2-100, HEIGHT/2-50, 200, 100) , (255, 255, 255), "start_button" )
+    start_button = ui.make_button( (WIDTH/2-100, HEIGHT/2+150, 200, 100) , (255, 255, 255), "start_button" )
     start_button.message = "start"
 
     drawButtonAction = ui.make_draw_button_action()
@@ -300,6 +304,7 @@ if __name__ == "__main__":
 
     #Insert entities into the game looper
     game_looper.insert_entity(viewer)
+    game_looper.insert_entity(hud)
     # game_looper.insert_entity(player)
     # game_looper.insert_entity(playerParticle)
     # game_looper.insert_entity(timer)
