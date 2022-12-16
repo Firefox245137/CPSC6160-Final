@@ -16,6 +16,14 @@ wall2, drawWallAction2 = goat.createWall((0,200,200,goat.HEIGHT-400), psolveActi
 wall3, drawWallAction3 = goat.createWall((goat.WIDTH-200,200,200,goat.HEIGHT-400), psolveAction, goat.playerWidth)
 wall4, drawWallAction4 = goat.createWall((0,goat.HEIGHT-200,goat.WIDTH,200), psolveAction, goat.playerWidth)
 
+counter = util.make_counter()
+countAction = util.make_counter_increment_action()
+counter.insert_action(countAction)
+
+coin, drawCoinAction = goat.createCoin([600, 300], playerParticle, goat.playerWidth, countAction)
+entities.append(coin)
+displayActions.append(drawCoinAction)
+
 entities.append(player)
 entities.append(playerParticle)
 entities.append(goal)

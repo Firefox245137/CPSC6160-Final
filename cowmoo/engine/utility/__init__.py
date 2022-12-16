@@ -7,6 +7,10 @@ def make_timer():
     result = ti.Timer()
     return result 
 
+def make_counter(): 
+    import cowmoo.engine.utility.entity.counter as co
+    result = co.Counter()
+    return result 
  
  
 ### 
@@ -32,3 +36,7 @@ def make_start_timer_action():
 def make_update_timer_action(): 
     import cowmoo.engine.utility.action.update_timer as ut 
     return ut.UpdateTimer() 
+
+def make_counter_increment_action(): 
+    import cowmoo.engine.utility.action.counter_increment as ci
+    return ci.CounterIncrement() 

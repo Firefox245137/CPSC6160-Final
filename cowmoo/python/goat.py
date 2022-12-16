@@ -74,18 +74,6 @@ class MovePlayer:
                 print( self.name + " for " + self.entity_state.name + " at " + str(event.pos)) 
         return
 
-#Not an actual action-- just a helper function
-def spawnEnemy(loc, direction, bound1, bound2, ppart, pwidth):
-    enemy = act.make_rectangle((loc[0], loc[1], 30, 30), (255,0,0))
-    drawEnemyAction = act.make_draw_rect_action()
-    enemyAIAction = EnemyAI(direction, bound1, bound2)
-    insideEnemyAction = act.make_is_inside_action(pwidth)
-    insideEnemyAction.types.append("loop")
-    insideEnemyAction.to_check.append(ppart)
-    enemy.insert_action(drawEnemyAction)
-    enemy.insert_action(enemyAIAction)
-    enemy.insert_action(insideEnemyAction)
-    return enemy, drawEnemyAction
 
 def playerSetup(playerWidth=20, playerSpeed=2.5, positionX = 50, positionY = 50, WIDTH=1280, HEIGHT=720):
     #Physics-related things
@@ -202,6 +190,18 @@ def createGoal(bounds, nextLevelName, ppart, gloop, dplay, playerWidth=20):
     goal.insert_action(insideGoalAction)
     return goal, goalDrawAction
 
+def spawnEnemy(loc, direction, bound1, bound2, ppart, pwidth):
+    enemy = act.make_rectangle((loc[0], loc[1], 30, 30), (255,0,0))
+    drawEnemyAction = act.make_draw_rect_action()
+    enemyAIAction = EnemyAI(direction, bound1, bound2)
+    insideEnemyAction = act.make_is_inside_action(pwidth)
+    insideEnemyAction.types.append("loop")
+    insideEnemyAction.to_check.append(ppart)
+    enemy.insert_action(drawEnemyAction)
+    enemy.insert_action(enemyAIAction)
+    enemy.insert_action(insideEnemyAction)
+    return enemy, drawEnemyAction
+
 def createWall(bounds, psolveAction, playerWidth=20):
     rect1 = act.make_rectangle(bounds, (200,200,200))
     drawRectAction1 = act.make_draw_rect_action()
@@ -211,6 +211,20 @@ def createWall(bounds, psolveAction, playerWidth=20):
     rect1collider.insert_action(isOutsideAction1)
     psolveAction.children.append(isOutsideAction1)
     return rect1, drawRectAction1
+    
+def createCoin(loc, ppart, pwidth, countAction):
+    coin = act.make_rectangle((loc[0], loc[1], 20, 20), (246,255,0))
+    drawCoinAction = act.make_draw_rect_action()
+    insideCoinAction = act.make_is_inside_action(pwidth)
+    insideCoinAction.types.append("loop")
+    insideCoinAction.to_check.append(ppart)
+    deactivateAction = util.make_deactivate_entity_action()
+    insideCoinAction.children.append(countAction)
+    insideCoinAction.children.append(deactivateAction)
+    coin.insert_action(drawCoinAction)
+    coin.insert_action(insideCoinAction)
+    coin.insert_action(deactivateAction)
+    return coin, drawCoinAction    
     
 WIDTH = 1280
 HEIGHT = 720
