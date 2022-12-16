@@ -7,6 +7,7 @@ class LoadLevel:
         self.name = "load_level"          # Names are frequently useful 
         self.verbose = False                   # verbose flags are handy 
         self.levelName = "../../cowmoo/python/" + levelName + ".py"       #This assumes all the levels are in a 'python' folder
+        self.pureName = levelName
         self.gameLoop = gameLoop
         self.displayMaster = displayMaster
         self.children = []                     # List of child actions that this action may choose to call 
@@ -16,15 +17,11 @@ class LoadLevel:
         #     return False 
         # if self.entity_state.active == False: 
         #     return False  
-        # if pygame.key.get_pressed()[self.key]:
-        #     return True
         return True 
  
     def act(self, data):                       # Run this action if the conditions are right 
         if self.condition_to_act(data):        # Check whether the conditions are right 
             for a in self.gameLoop.loop_content:
-                if(a.__class__.__name__ == "UpdateTimer"):
-                    print("Time taken for level:", a.entity_state.elapsed_time()/1000)
                 del a
             self.displayMaster.children.clear()
             term = self.gameLoop.event_content[0]

@@ -99,6 +99,31 @@ class CounterEqualTo:
             if self.verbose:                   # A diagnostic when the verbose is True 
                 print( self.name + " for " + self.entity_state.name + " at " + str(event.pos)) 
         return
+    
+class PrintTimerMessage:
+    def __init__(self, lvlname):
+        self.types = []
+        self.entity_state = None               # This class variable is assigned by the entity’s insert_action call 
+        self.name = "print_timer_message"          # Names are frequently useful 
+        self.verbose = False                   # verbose flags are handy 
+        self.lvlname = lvlname
+        self.children = []                     # List of child actions that this action may choose to call 
+ 
+    def condition_to_act(self, data):          # Check whether conditions are right for running this action 
+        if self.entity_state == None: 
+            return False 
+        if self.entity_state.active == False: 
+            return False  
+        return True 
+ 
+    def act(self, data):                       # Run this action if the conditions are right 
+        if self.condition_to_act(data):        # Check whether the conditions are right 
+            print("Time taken for", self.lvlname, "-", self.entity_state.elapsed_time()/1000)
+            for c in self.children:            # Have the children act as well 
+                c.act(data) 
+            if self.verbose:                   # A diagnostic when the verbose is True 
+                print( self.name + " for " + self.entity_state.name + " at " + str(event.pos)) 
+        return     
 
 def playerSetup(playerWidth=20, playerSpeed=2.5, positionX = 50, positionY = 50, WIDTH=1280, HEIGHT=720):
     #Physics-related things
@@ -113,28 +138,6 @@ def playerSetup(playerWidth=20, playerSpeed=2.5, positionX = 50, positionY = 50,
     playerParticle.insert_action(MovePlayer([-playerSpeed,0.0], pygame.K_LEFT))
     playerParticle.insert_action(MovePlayer([0.0,-playerSpeed], pygame.K_UP))
     playerParticle.insert_action(MovePlayer([0.0,playerSpeed], pygame.K_DOWN))
-    # particles = phys.make_particles()
-    # circles = []
-    # for i in range(100):
-    #     circle = act.make_circle(particleRadius, (random.randint(200, 400), random.randint(50, 250)),       #Spawn circles in a box on the topleft side of the screen
-    #              (random.randint(0,255), random.randint(0,255), random.randint(0,255)))
-    #     drawCircleAction = act.make_draw_round_action()
-    #     circle.insert_action(drawCircleAction)
-    #     circles.append(circle)
-    #     display.children.append(drawCircleAction)
-    #     particles.add_particle([circle.center[0], circle.center[1]], [30.0, 0], 1.0)        #Starting velocity of 30 to the right
-
-    #Natural gravity force
-    # gravity = phys.make_gravity_force()
-    # gravity.gravity = [0.0, .2]
-    # gravityAction = phys.make_gravity_force_action()
-    # gravity.insert_action(gravityAction)
-
-    #Natural spring force
-    # spring = phys.make_spring_force()
-    # spring.spring_constant = .01
-    # springAction = phys.make_spring_force_action()
-    # spring.insert_action(springAction)
 
     #Natural drag force
     drag = phys.make_drag_force()
@@ -142,24 +145,10 @@ def playerSetup(playerWidth=20, playerSpeed=2.5, positionX = 50, positionY = 50,
     dragAction = phys.make_drag_force_action()
     drag.insert_action(dragAction)
 
-    #User-initiated drag forced
-    # negDrag = phys.make_drag_force()
-    # negDrag.active = False
-    # negDrag.drag_constant = -1.0
-    # negDragAction = phys.make_drag_force_action()
-    # negDrag.insert_action(negDragAction)
-    # turnNegDragOn = util.make_activate_entity_action()
-    # turnNegDragOff = util.make_deactivate_entity_action()
-    # negDrag.insert_action(turnNegDragOn)
-    # negDrag.insert_action(turnNegDragOff)
-
     #Solvers
     psolveAction = phys.make_position_solve_action()
     vsolveAction = phys.make_velocity_solve_action()
-    # vsolveAction.children.append(gravityAction)
-    # vsolveAction.children.append(springAction)
     vsolveAction.children.append(dragAction)
-    # vsolveAction.children.append(negDragAction)
     playerParticle.insert_action(psolveAction)
     playerParticle.insert_action(vsolveAction)
 
@@ -170,46 +159,29 @@ def playerSetup(playerWidth=20, playerSpeed=2.5, positionX = 50, positionY = 50,
     esolveAction.types.append("loop")
     playerParticle.insert_action(esolveAction)
 
-    #For turning on and off certain forces
-    # activateSpringAction = phys.make_activate_physics_action(["spring"])
-    # activateDragAction = phys.make_activate_physics_action(["drag"])
-    # deactivateDragAction = phys.make_deactivate_physics_action(["drag"])
-    # deactivateSpringAction = phys.make_deactivate_physics_action(["spring"])
-    # particles.insert_action(activateSpringAction)
-    # particles.insert_action(activateDragAction)
-    # particles.insert_action(deactivateDragAction)
-    # particles.insert_action(deactivateSpringAction)
-
-    #Go through every circle (particle) and apply the pick and put actions accordingly
     pickAction = phys.make_pick_position_action(0)
     putAction = act.make_put_position_action()
     playerParticle.insert_action(pickAction)
     player.insert_action(putAction)
     pickAction.children.append(putAction)
     esolveAction.children.append(pickAction)
-    # for i in range(len(circles)):
-    #     pickAction = phys.make_pick_position_action(i)
-    #     putAction = act.make_put_position_action()
 
-    #     particles.insert_action(pickAction)
-    #     circles[i].insert_action(putAction)
-    #     pickAction.children.append(putAction)
-    #     esolveAction.children.append(pickAction)
-
-    #Bound particles within the window 
     windowContainerCollider = phys.make_rectangle_collider([playerWidth, playerWidth], [WIDTH-playerWidth, HEIGHT-playerWidth])
     insideAction = phys.make_inside_rectangle_collider_action()
     windowContainerCollider.insert_action(insideAction)
     psolveAction.children.append(insideAction)
     return player, playerParticle, drawPlayerAction, psolveAction
 
-def createGoal(bounds, nextLevelName, ppart, gloop, dplay, playerWidth=20):
+def createGoal(bounds, nextLevelName, ppart, gloop, dplay, timer, playerWidth=20):
     goal = act.make_rectangle(bounds, (0,255,0))
     goalDrawAction = act.make_draw_rect_action()
     insideGoalAction = act.make_is_inside_action(playerWidth)
     insideGoalAction.to_check.append(ppart)
     insideGoalAction.types.append("loop")
     loadNewLvlAction = pl.make_load_lvl_action(nextLevelName, gloop, dplay)
+    printMessageAction = PrintTimerMessage(nextLevelName[0:5] + str(int(nextLevelName[5:])-1))
+    timer.insert_action(printMessageAction)
+    insideGoalAction.children.append(printMessageAction)
     insideGoalAction.children.append(loadNewLvlAction)
     goal.insert_action(goalDrawAction)
     goal.insert_action(insideGoalAction)
