@@ -24,6 +24,12 @@ coin, drawCoinAction = goat.createCoin([600, 300], playerParticle, goat.playerWi
 entities.append(coin)
 displayActions.append(drawCoinAction)
 
+wall5, drawWallAction5 = goat.createWall((700,0,50,goat.HEIGHT), psolveAction, goat.playerWidth, 1, counter)
+entities.append(counter)
+# print(equalToAction.val)
+entities.append(wall5)
+displayActions.append(drawWallAction5)
+
 entities.append(player)
 entities.append(playerParticle)
 entities.append(goal)

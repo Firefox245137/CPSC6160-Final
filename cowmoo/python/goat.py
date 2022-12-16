@@ -73,7 +73,32 @@ class MovePlayer:
             if self.verbose:                   # A diagnostic when the verbose is True 
                 print( self.name + " for " + self.entity_state.name + " at " + str(event.pos)) 
         return
-
+    
+class CounterEqualTo:
+    def __init__(self, val):
+        self.types = ["loop"]
+        self.entity_state = None               # This class variable is assigned by the entity’s insert_action call 
+        self.name = "counter_equal_to"          # Names are frequently useful 
+        self.verbose = False                   # verbose flags are handy 
+        self.val = val
+        self.children = []                     # List of child actions that this action may choose to call 
+ 
+    def condition_to_act(self, data):          # Check whether conditions are right for running this action 
+        if self.entity_state == None: 
+            return False 
+        if self.entity_state.active == False: 
+            return False  
+        if self.entity_state.counter_value == self.val:
+            return True
+        return False 
+ 
+    def act(self, data):                       # Run this action if the conditions are right 
+        if self.condition_to_act(data):        # Check whether the conditions are right 
+            for c in self.children:            # Have the children act as well 
+                c.act(data) 
+            if self.verbose:                   # A diagnostic when the verbose is True 
+                print( self.name + " for " + self.entity_state.name + " at " + str(event.pos)) 
+        return
 
 def playerSetup(playerWidth=20, playerSpeed=2.5, positionX = 50, positionY = 50, WIDTH=1280, HEIGHT=720):
     #Physics-related things
@@ -202,7 +227,7 @@ def spawnEnemy(loc, direction, bound1, bound2, ppart, pwidth):
     enemy.insert_action(insideEnemyAction)
     return enemy, drawEnemyAction
 
-def createWall(bounds, psolveAction, playerWidth=20):
+def createWall(bounds, psolveAction, playerWidth=20, coinsToUnlock=0, counter=None):
     rect1 = act.make_rectangle(bounds, (200,200,200))
     drawRectAction1 = act.make_draw_rect_action()
     rect1.insert_action(drawRectAction1)
@@ -210,6 +235,16 @@ def createWall(bounds, psolveAction, playerWidth=20):
     isOutsideAction1 = phys.make_outside_rectangle_collider_action()
     rect1collider.insert_action(isOutsideAction1)
     psolveAction.children.append(isOutsideAction1)
+    if coinsToUnlock > 0:
+        rect1.color = (237, 176, 7)
+        deactivateAction1 = util.make_deactivate_entity_action()
+        deactivateAction2 = util.make_deactivate_entity_action()
+        rect1.insert_action(deactivateAction1)
+        rect1collider.insert_action(deactivateAction2)
+        equalToAction = CounterEqualTo(coinsToUnlock)
+        equalToAction.children.append(deactivateAction1)
+        equalToAction.children.append(deactivateAction2)
+        counter.insert_action(equalToAction)
     return rect1, drawRectAction1
     
 def createCoin(loc, ppart, pwidth, countAction):
@@ -225,6 +260,7 @@ def createCoin(loc, ppart, pwidth, countAction):
     coin.insert_action(insideCoinAction)
     coin.insert_action(deactivateAction)
     return coin, drawCoinAction    
+
     
 WIDTH = 1280
 HEIGHT = 720
