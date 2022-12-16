@@ -31,5 +31,5 @@ class DrawRound:
         return
 
     def draw(self, screen):
-        pygame.draw.circle(screen, self.entity_state.color, self.entity_state.center, self.entity_state.radius)
+        pygame.draw.circle(screen, self.entity_state.color, [int(self.entity_state.center[0]), int(self.entity_state.center[1])], self.entity_state.radius)
         return
