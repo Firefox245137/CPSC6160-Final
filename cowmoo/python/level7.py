@@ -11,7 +11,7 @@ startTimerAction = util.make_start_timer_action()
 updateTimerAction = util.make_update_timer_action()
 timer.insert_action(startTimerAction)
 timer.insert_action(updateTimerAction)
-player, playerParticle, drawPlayerAction, psolveAction = goat.playerSetup(goat.playerWidth, 2.5)
+player, playerParticle, drawPlayerAction, psolveAction = goat.playerSetup(goat.playerWidth, 2.5, 200, 200)
 # print(player, playerParticle, drawPlayerAction)
 goal, drawGoalAction = goat.createGoal((1000,500,60,30), "level8", playerParticle, gloop, dplay)
 
@@ -22,9 +22,9 @@ wall4, drawWallAction4 = goat.createWall((0,goat.HEIGHT-100,goat.WIDTH,100), pso
 wall5, drawWallAction5 = goat.createWall((400,0,50,400), psolveAction, goat.playerWidth)
 wall6, drawWallAction6 = goat.createWall((800,goat.HEIGHT-400,50,400), psolveAction, goat.playerWidth)
 
-enemy, drawEnemyAction = goat.spawnEnemy([100,400], [1,0], [100,400], [400,400], playerParticle, goat.playerWidth)
-enemy2, drawEnemyAction2 = goat.spawnEnemy([800,100], [0,1], [800,100], [800,300], playerParticle, goat.playerWidth)
-enemy3, drawEnemyAction3 = goat.spawnEnemy([450,100], [1,1], [450,100], [770,450], playerParticle, goat.playerWidth)
+enemy, drawEnemyAction = goat.spawnEnemy([100,400], [1,0], [100,400], [400,400], playerParticle, goat.playerWidth, "level7", gloop, dplay)
+enemy2, drawEnemyAction2 = goat.spawnEnemy([800,100], [0,1], [800,100], [800,300], playerParticle, goat.playerWidth, "level7", gloop, dplay)
+enemy3, drawEnemyAction3 = goat.spawnEnemy([450,100], [1,1], [450,100], [770,450], playerParticle, goat.playerWidth, "level7", gloop, dplay)
 
 entity_list = [wall1, wall2, wall3, wall4, wall5, wall6, enemy, enemy2, enemy3]
 display_list = [drawWallAction1, drawWallAction2, drawWallAction3, drawWallAction4, 

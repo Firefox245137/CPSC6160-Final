@@ -11,7 +11,7 @@ startTimerAction = util.make_start_timer_action()
 updateTimerAction = util.make_update_timer_action()
 timer.insert_action(startTimerAction)
 timer.insert_action(updateTimerAction)
-player, playerParticle, drawPlayerAction, psolveAction = goat.playerSetup(goat.playerWidth, 2.5)
+player, playerParticle, drawPlayerAction, psolveAction = goat.playerSetup(goat.playerWidth, 2.5, 200, 200)
 # print(player, playerParticle, drawPlayerAction)
 goal, drawGoalAction = goat.createGoal((1000,500,60,30), "level3", playerParticle, gloop, dplay)
 

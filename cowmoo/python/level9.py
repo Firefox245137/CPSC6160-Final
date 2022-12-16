@@ -11,7 +11,7 @@ startTimerAction = util.make_start_timer_action()
 updateTimerAction = util.make_update_timer_action()
 timer.insert_action(startTimerAction)
 timer.insert_action(updateTimerAction)
-player, playerParticle, drawPlayerAction, psolveAction = goat.playerSetup(goat.playerWidth, 2.5)
+player, playerParticle, drawPlayerAction, psolveAction = goat.playerSetup(goat.playerWidth, 2.5, 200, 200)
 goal, drawGoalAction = goat.createGoal((1050,520,60,60), "level10", playerParticle, gloop, dplay)
 
 wall1, drawWallAction1 = goat.createWall((0,0,goat.WIDTH,100), psolveAction, goat.playerWidth)
@@ -26,10 +26,10 @@ wall7, drawWallAction7 = goat.createWall((300,300,50,70), psolveAction, goat.pla
 wall8, drawWallAction8 = goat.createWall((600,goat.HEIGHT-350,50,70), psolveAction, goat.playerWidth)
 wall9, drawWallAction9 = goat.createWall((900,300,50,70), psolveAction, goat.playerWidth)
 
-enemy, drawEnemyAction = goat.spawnEnemy([300,100], [0,1], [300,100], [300,goat.HEIGHT/2-160], playerParticle, goat.playerWidth)
-enemy2, drawEnemyAction2 = goat.spawnEnemy([600,150], [0,1], [600,100], [600,goat.HEIGHT/2-160], playerParticle, goat.playerWidth)
-enemy3, drawEnemyAction3 = goat.spawnEnemy([400,goat.HEIGHT-200], [0,1], [400,goat.HEIGHT-230], [400,goat.HEIGHT-130], playerParticle, goat.playerWidth)
-enemy4, drawEnemyAction4 = goat.spawnEnemy([800,goat.HEIGHT-150], [0,1], [800,goat.HEIGHT-230], [800,goat.HEIGHT-130], playerParticle, goat.playerWidth)
+enemy, drawEnemyAction = goat.spawnEnemy([300,100], [0,1], [300,100], [300,goat.HEIGHT/2-160], playerParticle, goat.playerWidth, "level9", gloop, dplay)
+enemy2, drawEnemyAction2 = goat.spawnEnemy([600,150], [0,1], [600,100], [600,goat.HEIGHT/2-160], playerParticle, goat.playerWidth, "level9", gloop, dplay)
+enemy3, drawEnemyAction3 = goat.spawnEnemy([400,goat.HEIGHT-200], [0,1], [400,goat.HEIGHT-230], [400,goat.HEIGHT-130], playerParticle, goat.playerWidth, "level9", gloop, dplay)
+enemy4, drawEnemyAction4 = goat.spawnEnemy([800,goat.HEIGHT-150], [0,1], [800,goat.HEIGHT-230], [800,goat.HEIGHT-130], playerParticle, goat.playerWidth, "level9", gloop, dplay)
 
 entity_list = [wall1, wall2, wall3, wall4, wall5, wall6, wall7, wall8, wall9, enemy, enemy2, enemy3, enemy4]
 display_list = [drawWallAction1, drawWallAction2, drawWallAction3, drawWallAction4, drawWallAction5, drawWallAction6, drawWallAction7,

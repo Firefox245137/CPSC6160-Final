@@ -21,8 +21,8 @@ wall2, drawWallAction2 = goat.createWall((0,200,200,goat.HEIGHT-400), psolveActi
 wall3, drawWallAction3 = goat.createWall((goat.WIDTH-200,200,200,goat.HEIGHT-400), psolveAction, goat.playerWidth)
 wall4, drawWallAction4 = goat.createWall((0,goat.HEIGHT-200,goat.WIDTH,200), psolveAction, goat.playerWidth)
 
-enemy, drawEnemyAction = goat.spawnEnemy([650,350], [0,1], [650,200], [650,490], playerParticle, goat.playerWidth)
-enemy2, drawEnemyAction2 = goat.spawnEnemy([800,250], [0,1], [800,200], [800,490], playerParticle, goat.playerWidth)
+enemy, drawEnemyAction = goat.spawnEnemy([650,350], [0,1], [650,200], [650,490], playerParticle, goat.playerWidth, "level6", gloop, dplay)
+enemy2, drawEnemyAction2 = goat.spawnEnemy([800,250], [0,1], [800,200], [800,490], playerParticle, goat.playerWidth, "level6", gloop, dplay)
 
 entity_list = [wall1, wall2, wall3, wall4, enemy, enemy2]
 display_list = [drawWallAction1, drawWallAction2, drawWallAction3, drawWallAction4, drawEnemyAction, drawEnemyAction2]
