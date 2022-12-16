@@ -215,13 +215,15 @@ def createGoal(bounds, nextLevelName, ppart, gloop, dplay, playerWidth=20):
     goal.insert_action(insideGoalAction)
     return goal, goalDrawAction
 
-def spawnEnemy(loc, direction, bound1, bound2, ppart, pwidth):
+def spawnEnemy(loc, direction, bound1, bound2, ppart, pwidth, currLevel, gloop, dplay):
     enemy = act.make_rectangle((loc[0], loc[1], 30, 30), (255,0,0))
     drawEnemyAction = act.make_draw_rect_action()
     enemyAIAction = EnemyAI(direction, bound1, bound2)
     insideEnemyAction = act.make_is_inside_action(pwidth)
     insideEnemyAction.types.append("loop")
     insideEnemyAction.to_check.append(ppart)
+    reloadLvlAction = pl.make_load_lvl_action(currLevel, gloop, dplay)
+    insideEnemyAction.children.append(reloadLvlAction)
     enemy.insert_action(drawEnemyAction)
     enemy.insert_action(enemyAIAction)
     enemy.insert_action(insideEnemyAction)

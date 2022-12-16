@@ -31,7 +31,6 @@ class IsInside:
                 for p in i.position:
                     if p[0] > self.entity_state.bounds[0]-self.offset and p[0] < self.entity_state.bounds[2] + self.entity_state.bounds[0]+self.offset and p[1] > self.entity_state.bounds[1]-self.offset and p[1] < self.entity_state.bounds[3] + self.entity_state.bounds[1]+self.offset: 
                         new_data.append(curr)
-                        print("inside")
                     curr += 1
             for i in new_data:
                 for c in self.children:            # Have the children act as well 

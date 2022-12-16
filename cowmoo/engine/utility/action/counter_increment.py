@@ -21,7 +21,6 @@ class CounterIncrement:
         if self.condition_to_act(data):        # Check whether the conditions are right 
  
             self.entity_state.counter_value += 1
-            print(self.entity_state.counter_value)
             for c in self.children:            # Have the children act as well 
                 c.act(data) 
             if self.verbose:                   # A diagnostic when the verbose is True 
