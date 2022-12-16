@@ -196,10 +196,10 @@ def createGoal(bounds, nextLevelName, ppart, gloop, dplay, timer, playerWidth=20
     insideGoalAction = act.make_is_inside_action(playerWidth)
     insideGoalAction.to_check.append(ppart)
     insideGoalAction.types.append("loop")
-    loadNewLvlAction = pl.make_load_lvl_action(nextLevelName, gloop, dplay)
+    loadNewLvlAction = pl.make_load_lvl_action(nextLevelName, gloop, dplay)     #Loads next level when you touch it
     printMessageAction = PrintTimerMessage(nextLevelName[0:5] + str(int(nextLevelName[5:])-1))      #This will NOT work for all games, but since PrintTimerMessage is a custom method anyways, who cares
     timer.insert_action(printMessageAction)
-    soundAction = snd.make_emit_sound_action("goal.wav")
+    soundAction = snd.make_emit_sound_action("goal.wav")        #Make sound
     soundAction.set_volume(.5)
     insideGoalAction.children.append(soundAction)
     insideGoalAction.children.append(printMessageAction)
@@ -209,6 +209,7 @@ def createGoal(bounds, nextLevelName, ppart, gloop, dplay, timer, playerWidth=20
     goal.insert_action(soundAction)
     return goal, goalDrawAction
 
+#Helper function to spawn a red enemy rectangle
 def spawnEnemy(loc, direction, bound1, bound2, ppart, pwidth, currLevel, gloop, dplay):
     enemy = act.make_rectangle((loc[0], loc[1], 30, 30), (255,0,0))
     drawEnemyAction = act.make_draw_rect_action()
@@ -216,9 +217,9 @@ def spawnEnemy(loc, direction, bound1, bound2, ppart, pwidth, currLevel, gloop, 
     insideEnemyAction = act.make_is_inside_action(pwidth)
     insideEnemyAction.types.append("loop")
     insideEnemyAction.to_check.append(ppart)
-    reloadLvlAction = pl.make_load_lvl_action(currLevel, gloop, dplay)
+    reloadLvlAction = pl.make_load_lvl_action(currLevel, gloop, dplay)      #Reloads the current level if you touch it (aka you die)
     insideEnemyAction.children.append(reloadLvlAction)
-    soundAction = snd.make_emit_sound_action("hitHurt.wav")
+    soundAction = snd.make_emit_sound_action("hitHurt.wav")     #Make sound
     soundAction.set_volume(.5)
     insideEnemyAction.children.append(soundAction)
     enemy.insert_action(drawEnemyAction)
